@@ -1,30 +1,71 @@
-# benchmark
+# eval-dataset-design
 
-AI 评测与学习工具集。包含可复用的方法论框架，用于评测集设计和课程笔记整理。
+AI 模型评测集设计的结构化流程框架。从项目信息输入到可执行的评测方案输出，覆盖数据集构建原则、评测维度设计、打分规则生成和 case 样例产出。
 
-## 包含的 Skill
-
-### [eval-dataset-design](./eval-dataset-design/)
-AI 模型评测集设计框架。输入项目信息，输出构建原则、评测维度、打分规则和 case 样例。
-
-### [course-notes](./course-notes/)
-课程笔记整理框架。从录音转写和个人笔记中提炼结构化高质量笔记。
+> 不是理论框架，是可以直接用的流程。每一步都有输入/输出/自检，踩过的坑都列在常见错误表里。
 
 ---
 
-每个 Skill 都是独立的 SKILL.md 文件，可以单独使用。
+## 解决什么问题
 
-## 使用方式
+设计评测集时最常见的三个坑：
 
-这些是 [Hermes Agent](https://github.com/NousResearch/hermes-agent) 的 Skill 文件。
+1. **构建原则和评测维度搞混** — "我们选了冷门库的代码"是构建原则，不是评测维度
+2. **打分规则靠标注员主观判断** — "部分正确""基本满足"导致标注一致性很差
+3. **难度分档没有可操作标准** — Hard 不是"比较难"，而是"多约束 + 多步推断 + 信息缺口"同时满足
 
-```bash
-# 复制到 Hermes 全局 skills 目录
-cp -r eval-dataset-design ~/.hermes/skills/productivity/
-cp -r course-notes ~/.hermes/skills/productivity/
+这个框架用五步流程系统性地解决这三个问题。
+
+---
+
+## 工作流程
+
+```
+输入：项目背景信息
+  │
+  ▼
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│  收集信息    │ ──▶ │  构建原则    │ ──▶ │  评测维度    │
+│  确认缺口    │     │  三个原则    │     │  4~6 个维度  │
+└─────────────┘     └─────────────┘     └─────────────┘
+                                               │
+                                               ▼
+                    ┌─────────────┐     ┌─────────────┐
+                    │  Case 样例   │ ◀── │  打分规则    │
+                    │  5~8 道题    │     │  可执行模板  │
+                    └─────────────┘     └─────────────┘
+                          │
+                          ▼
+                    输出：完整评测方案
 ```
 
-也可以不通过 Hermes，直接按各 SKILL.md 的流程手动执行。
+---
+
+## 安装使用
+
+这是 [Hermes Agent](https://github.com/NousResearch/hermes-agent) 的 Skill 文件。
+
+```bash
+# 全局安装
+cp SKILL.md ~/.hermes/skills/productivity/eval-dataset-design/SKILL.md
+
+# 或项目级安装
+mkdir -p <your-project>/.hermes/skills/eval-dataset-design/
+cp SKILL.md <your-project>/.hermes/skills/eval-dataset-design/SKILL.md
+```
+
+触发条件：对话中提到"评测集"、"benchmark 设计"、"评测维度"、"打分规则"、"模型评测"、"数据集构建"时自动触发。
+
+---
+
+## 项目结构
+
+```
+.
+├── SKILL.md          # 核心框架（五步流程 + 打分模板 + 常见错误表）
+├── README.md         # 本文件
+└── LICENSE           # MIT 开源协议
+```
 
 ## License
 
